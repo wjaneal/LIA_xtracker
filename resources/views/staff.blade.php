@@ -6,7 +6,9 @@
         <title>
   LIA Expenses Tracker
         </title>
-	<link href="/css/all.css" rel="stylesheet">
+ 	{!!HTML::style('assets/css/bootstrap.css')!!}
+        {!!HTML::style('assets/css/style.css')!!}
+	<link href="{{asset('css/all.css')}}" rel="stylesheet">
     </head>
     <body>
         @include("header_staff")

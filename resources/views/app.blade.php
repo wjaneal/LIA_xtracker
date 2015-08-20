@@ -6,7 +6,7 @@
         <title>
   LIA Expenses Tracker
         </title>
-	<link href="/css/all.css" rel="stylesheet">
+   <link href="{{asset('css/all.css')}}" rel="stylesheet">
     </head>
     <body>
         @include("header_admin")

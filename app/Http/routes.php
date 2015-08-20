@@ -22,15 +22,18 @@ Route::put('users/update/{id}',['uses'=>'UsersController@update', function($id){
 
 
 
-
-Route::group(['middleware'=>'auth'], function() {
-	Route::resource('expenditures', 'ExpendituresController');
+	Route::group(['middleware'=>'auth'], function(){
+		Route::resource('expenditures', 'ExpendituresController');
+	});
 	Route::group(['middleware'=>'App\Http\Middleware\StaffMiddleware'], function(){
+		Route::group(['middleware'=>'auth'], function() {
 			Route::get('welcome', function(){
 				return view('staffhome');
 				});
+			});
 		});
 	Route::group(['middleware' => 'App\Http\Middleware\AdminMiddleware'], function(){
+		Route::group(['middleware'=>'auth'], function() {
 			Route::get('welcome', function(){
 				return view('admin');
 				});
@@ -43,8 +46,8 @@ Route::group(['middleware'=>'auth'], function() {
 			Route::resource('invoices','InvoicesController');
 			Route::resource('notes', 'NotesController');
 			Route::resource('users','UsersController');
+			});
 		});
-	});
 /***
 ***Authentication
 **/

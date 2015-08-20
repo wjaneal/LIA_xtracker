@@ -20,6 +20,11 @@ class ExpendituresController extends Controller
     public function index()
     {
     $user = Auth::user();
+    $startdate = strtotime(Config::get('Globals.startdate'));
+    $month = date("m", $startdate);
+    $day = date("d", $startdate);
+    $year = intval(date("Y", $startdate));
+    $AddOneYear = mktime(0,0,0,$month, $day, $year+1);
     $subcategories = DB::table('budgets')->select('subcategory')->where('departmentid', '=', $user->departmentid)->where('startdate', '=', Config::get('Globals.startdate'))->get();
 
                 $subcategory_options = array();
@@ -28,7 +33,11 @@ class ExpendituresController extends Controller
                         $subcategory_options[$subcategory->subcategory] = $subcategory->subcategory;
                 }
                         $expenditures=DB::table('expenditures')->where('departmentid', "=", $user->departmentid)->where('date','>=', Config::get('Globals.startdate'))->get();
-                        $budget = DB::table('budgets')->where('departmentid','=',$user->departmentid)->where('startdate', '>=', Config::get('Globals.startdate'))->get();
+                        $budget = DB::table('budgets')
+				->where('departmentid','=',$user->departmentid)
+				->where('startdate', '>=', Config::get('Globals.startdate'))
+				->where('startdate', '<', date("Y-m-d", $AddOneYear))
+				->get();
                         #Total each subcategory expenditure
                         $subcategory_totals = DB::table('expenditures')->select('subcategory', DB::raw('SUM(amount) as sum1'))->groupBy('subcategory')->get();
                         $total = 0;
@@ -54,6 +63,7 @@ class ExpendituresController extends Controller
      */
     public function create(Formbuilder $formBuilder)
     {
+  	  $departmentid = Auth::user()->departmentid;
           $expenditureForm = $formBuilder->create('\App\Forms\ExpenditureForm', [
         'method'=>"POST",
         'url'=>route('expenditures.store')
