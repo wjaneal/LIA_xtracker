@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
+#use Illuminate\Http\Request;
 use DB;
 use Auth;
 use Config;
@@ -30,9 +31,9 @@ class ExpendituresController extends Controller
                 $subcategory_options = array();
                 #Make a list of budget subcategories
                 foreach($subcategories as $subcategory){
-                        $subcategory_options[$subcategory->subcategory] = $subcategory->subcategory;
-                }
-                        $expenditures=DB::table('expenditures')->where('departmentid', "=", $user->departmentid)->where('date','>=', Config::get('Globals.startdate'))->get();
+			$subcategory_options[$subcategory->subcategory] = $subcategory->subcategory;
+			}
+                        $expenditures=DB::table('expenditures')->where('date', ">=", Config::get('Globals.startdate'))->where('departmentid',"=",$user->departmentid)->get();
                         $budget = DB::table('budgets')
 				->where('departmentid','=',$user->departmentid)
 				->where('startdate', '>=', Config::get('Globals.startdate'))
@@ -66,8 +67,9 @@ class ExpendituresController extends Controller
   	  $departmentid = Auth::user()->departmentid;
           $expenditureForm = $formBuilder->create('\App\Forms\ExpenditureForm', [
         'method'=>"POST",
-        'url'=>route('expenditures.store')
-        ]);
+        'url'=>route('expenditures.store')])->add('departmentid', 'hidden',[
+		'value'=>$departmentid
+        	]);
         return view('expenditures.create', compact('expenditureForm'));
 
     }
@@ -80,7 +82,14 @@ class ExpendituresController extends Controller
      */
     public function store(Requests\CreateExpenditureRequest $request, FormBuilder $form)
     {
-         \App\Expenditure::create(Request::all());
+	\App\Expenditure::create($request->all());
+        #$expenditure = new  \App\Expenditure;
+	#$expenditure->description = $request->description;
+	#$expenditure->amount = $request->amount;
+	#$expenditure->date - $request->date;
+	#$expenditure->departmentid = $request->departmentid;
+	#var_dump($request['amount']);
+	#$expenditure->save();
         return redirect('expenditures');
     }
     /**

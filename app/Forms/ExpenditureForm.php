@@ -24,10 +24,10 @@ class ExpenditureForm extends Form
 		'choices'=>$subcategories
                 ])
             ->add('description', 'text')
-	    ->add('departmentid', 'hidden',
-		['value'=>$departmentid]
-		)
-            ->add('date', 'text')
+	    ->add('amount', 'text')
+            ->add('date', 'text', [
+		'label'=>'Date - (yyyy-mm-dd)'
+			])
             ->add('save', 'submit', ['label' => 'Submit Expenditure']);
 
     }

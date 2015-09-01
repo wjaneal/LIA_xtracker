@@ -13,7 +13,7 @@ class CreateExpenditureRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,11 +25,11 @@ class CreateExpenditureRequest extends Request
     {
         return [
             //
-		'category'=>'required',
-                'subcategory'=>'required',
-                'amount'=>'required',
+		'subcategory'=>'required',
+                'amount'=>'required|numeric',
                 'date'=>'required|date',
-                'description'=>'required|text'
+                'description'=>'required',
+                'departmentid'=>'required'
 
         ];
     }

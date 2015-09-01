@@ -11,6 +11,8 @@ class Expenditure extends Model
 	'category',
 	'subcategory',
 	'description',
-	'date'
+	'date',
+	'amount',
+	'departmentid'
 	];
 }
